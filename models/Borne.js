@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const { typelocation, typecharge } = require("../utils/bornetype");
-
 const GeoJSONPoint = new mongoose.Schema({
   type: {
     type: String,
