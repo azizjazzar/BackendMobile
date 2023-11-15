@@ -7,10 +7,13 @@ const app = express();
 connectDB();
 app.use(express.json());
 
+app.use("/api/vehicule", require("./routes/vehicule"));
+
 app.use("/api/auth", require("./routes/auth"));
 
 app.use("/api/borne", require("./routes/borne"));
 app.use("/api/review", require("./routes/review"));
+
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
