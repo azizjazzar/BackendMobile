@@ -2,24 +2,40 @@ const Vehicule = require('../models/Vehicule');
 
 // Create operation for vehicules
 exports.addVehicule = async (req, res, next) => {
-  const { id_v, Marque, Modele, VitessMax, Capacite_batterie, boite, nombre_de_place, Image } = req.body;
+  const {
+    id_v,
+    marque,
+    prix,
+    modele,
+    descriptionV,
+    vitesseMax,
+    capaciteBatterie,
+    boite,
+    nombreDePlaces,
+    imagecartegrise,
+    image,
+  } = req.body;
 
   try {
     const vehicule = await Vehicule.create({
       id_v,
-      Marque,
-      Modele,
-      VitessMax,
-      Capacite_batterie,
+      marque,
+      prix,
+      modele,
+      descriptionV,
+      vitesseMax,
+      capaciteBatterie,
       boite,
-      nombre_de_place,
-      Image,
+      nombreDePlaces,
+      imagecartegrise,
+      image,
     });
     res.status(201).json({ success: true, message: 'Vehicule has been added' });
   } catch (error) {
     next(error);
   }
 };
+
 
 // Read operation for a specific vehicule by ID
 exports.getVehiculeById = async (req, res, next) => {
@@ -59,11 +75,11 @@ exports.deleteVehicule = async (req, res, next) => {
 };
 
 // Get all vehicules
-exports.getAllVehicules = async (req, res, next) => {
-  try {
-    const vehicules = await Vehicule.find();
-    res.status(200).json({ success: true, data: vehicules });
-  } catch (error) {
-    next(error);
-  }
-};
+  exports.getAllVehicules = async (req, res, next) => {
+    try {
+      const vehicules = await Vehicule.find();
+      res.status(200).json(vehicules);
+    } catch (error) {
+      next(error);
+    }
+  };

@@ -1,19 +1,19 @@
 const express = require("express");
 const router = express.Router();
+const { update, sendmail } = require("../controllers/auth");
+
 const {
-  register,
-  login,
-  forgotpassword,
-  resetpassword,
-  update,
-  users,
+  register,users,getById,getByEmail,remove
+  
 } = require("../controllers/auth");
 
-router.post("/register", register);
-router.post("/login", login);
-router.post("/forgotpassword", forgotpassword);
-router.put("/resetpassword/:resetToken", resetpassword);
-router.put("/update", update);
-router.get("/users", users);
-  
+router.route("/register").post(register);
+router.route("/update/:email").put(update);
+
+router.route("/users").get(users);
+router.route("/user/:email").get(getByEmail);
+router.route("/email/:email/:code").get(sendmail);
+router.route("/user/delete/:email").delete(remove);
+
+
 module.exports = router;

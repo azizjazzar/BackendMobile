@@ -1,23 +1,31 @@
 const mongoose = require("mongoose");
 
 const VehiculeSchema = new mongoose.Schema({
-  id_v: {
-    type: Number,
-    required: false,
-  },
-  Marque: {
+  marque: {
     type: String,
     required: false,
   },
-  Modele: {
-    type: String,
-    required: false,
-  },
-  VitessMax: {
+
+  prix: {
     type: Number,
     required: false,
   },
-  Capacite_batterie: {
+  modele: {
+    type: String,
+    required: false,
+  },
+
+  descriptionV: {
+    type: String,
+    required: false,
+  },
+
+
+  vitesseMax: {
+    type: Number,
+    required: false,
+  },
+  capaciteBatterie: {
     type: String,
     required: false,
   },
@@ -25,13 +33,19 @@ const VehiculeSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  nombre_de_place: {
+  nombreDePlaces: {
     type: Number,
     required: false,
   },
-  Image: {
-    type: String,
-    required: false,
+
+  imagecartegrise: {
+    type: String, // ou le type approprié pour votre champ imagecartegrise
+    required: false, // rendre le champ obligatoire
+  },
+
+  image: {
+    type: String, // ou le type approprié pour votre champ imagecartegrise
+    required: false, // rendre le champ obligatoire
   },
 });
 

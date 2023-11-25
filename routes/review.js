@@ -5,15 +5,17 @@ const {
   getReviewById,
   updateReview,
   deleteReview,
-  getAllReviewsForStation
+  getAllReviewsForStation,
+  Reviews
 } = require("../controllers/ReviewCRUD");
 
 // Review CRUD Routes
-router.post("   ", addReview);
+router.post("/addreview", addReview);
 router.get("/review/:id", getReviewById);
 router.put("/review/:id", updateReview);
 router.delete("/review/:id", deleteReview);
 router.get("/:borneId/reviews", getAllReviewsForStation);
+router.get("/reviews", Reviews);
 
 module.exports = router;
 

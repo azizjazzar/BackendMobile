@@ -1,5 +1,5 @@
 const Borne = require("../models/Borne");
-
+const Review = require("../models/Review");
 
 // Create operation
 exports.add = async (req, res, next) => {
@@ -10,7 +10,7 @@ exports.add = async (req, res, next) => {
       typelocation,
       typecharge,
       picture,
-      coorinate,
+      coordinate,
   } = req.body;
 
   try {
@@ -21,7 +21,7 @@ exports.add = async (req, res, next) => {
           typelocation,
           typecharge,
           picture,
-          coorinate,
+          coordinate,
         
       });
       console.log(bornes)
@@ -33,18 +33,8 @@ exports.add = async (req, res, next) => {
 
 // Read operation
 // Get a Borne by ID
-exports.getById = async (req, res, next) => {
-  const { id } = req.params;
-  try {
-    const borne = await Borne.findById(id);
-    if (!borne) {
-      return res.status(404).json({ success: false, message: "Borne not found" });
-    }
-    res.status(200).json({ success: true, data: borne });
-  } catch (error) {
-    next(error);
-  }
-};
+
+
 
 // Update a Borne by ID
 exports.update = async (req, res, next) => {
@@ -71,3 +61,35 @@ exports.remove = async (req, res, next) => {
     next(error);
   }
 };
+exports.getBorneWithReviews = async (req, res, next) => {
+  try {
+    const borneId = req.params.borneId;
+
+    // Find the borne by ID
+    const borne = await Borne.findById(borneId);
+
+    if (!borne) {
+      return res.status(404).json({ success: false, message: "Borne not found" });
+    }
+
+    // Find reviews related to the specific borne
+    const reviews = await Review.find({ borne: borneId }).populate("user");
+
+    res.status(200).json({
+      success: true,
+      data: { borne, reviews },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.bornes = async (req, res, next) => {
+  try {
+    const borness = await Borne.find();
+    res.send(borness);
+  } catch (error) {
+    next(error);
+  }
+};
+

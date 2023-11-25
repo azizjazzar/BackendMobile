@@ -1,87 +1,58 @@
-const crypto = require("crypto");
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+
 
 const UserSchema = new mongoose.Schema({
-  
   nom: {
     type: String,
-    required: true,
-    trim: true,
+    required: [true, "Please provide a name for the location"],
+    description: "Name is a required field",
   },
   prenom: {
     type: String,
-    required: true,
-    trim: true,
+    //required: [true, "Please provide the name of the city"],
+    description: "City name is a required field",
   },
   email: {
     type: String,
-    required: true,
-    unique: false,//mbaad nbadlouha true juste l test w khaw  
-    match: [/\S+@\S+\.\S+/, "Please enter a valid email"],
+    required: [true, "Please provide the name of the city"],
+    description: "City name is a required field",
   },
   genre: {
     type: String,
-    required: true,
-    enum: ["Male", "Female", "Other"],
+    required: [true, "Please provide the name of the city"],
+    description: "City name is a required field",
   },
-  date_naissance: {
-    type: Date,
-    required: true,
+  datenaissance: {
+    type: String,
+    required: [true, "Please provide the name of the city"],
+    description: "City name is a required field",
   },
   telephone: {
     type: String,
-    required: true,
-    trim: true,
-    match: [/^\d{10}$/, "Please enter a valid 10-digit phone number"],
+    required: [true, "Please provide the name of the city"],
+    description: "City name is a required field",
   },
+
   adresse: {
     type: String,
-    required: true,
-    trim: true,
+    required: [true, "Please provide the address"],
+    description: "Address is a required field",
   },
   mot_passe: {
     type: String,
-    required: true,
-    minlength: 6,
+    required: [true, "Please provide the address"],
+    description: "Address is a required field",
   },
-  Type: {
+  type: {
     type: String,
-    required: true,
-    enum: ["Type1", "Type2", "Type3"],
+  
   },
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
+  picture: {
+    type: String,
+    
+  },
+  
 });
 
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-
-  const salt = await bcrypt.genSalt(10);
-  this.mot_passe = await bcrypt.hash(this.mot_passe, salt);
-  next();
-});
-
-UserSchema.methods.matchPasswords = async function (password) {
-  return await bcrypt.compare(password, this.mot_passe);
-};
-
-UserSchema.methods.getResetPasswordToken = function () {
-  const resetToken = crypto.randomBytes(20).toString("hex");
-
-  this.resetPasswordToken = crypto
-    .createHash("sha256")
-    .update(resetToken)
-    .digest("hex");
-
-  this.resetPasswordExpire = Date.now() + 10 * (60 * 1000); 
-
-  return resetToken;
-};
-
-const User = mongoose.model("User", UserSchema);
-
+const User = mongoose.model("user", UserSchema);
 module.exports = User;

@@ -63,3 +63,12 @@ exports.getAllReviewsForStation = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.Reviews = async (req, res, next) => {
+  try {
+    const reviews = await Review.find();
+    res.send(reviews);
+  } catch (error) {
+    next(error);
+  }
+};
