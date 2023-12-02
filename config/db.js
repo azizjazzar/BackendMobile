@@ -1,16 +1,17 @@
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-const connectDB = () => {
-  mongoose
-    .connect("mongodb://127.0.0.1:27017/Electrigo")
-    .then(() => {
-      console.log("MongoDB Connected");
-    })
-    .catch((error) => {
-      console.error("Error connecting to database:", error);
-      process.exit(1); 
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error("Error connecting to database:", error);
+    process.exit(1);
+  }
 };
 
 module.exports = connectDB;
