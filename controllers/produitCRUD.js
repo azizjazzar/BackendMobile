@@ -2,17 +2,18 @@ const Product = require('../models/Product');
 
 
 exports.addProduct = async (req, res, next) => {
-  const { nom, description, prix, rating } = req.body;
+  const {name, description,imageUrl, price,isFavorite } = req.body;
   const accountSid = 'AC2e3e3f431567d6395601f5cc2dbb1e7a';
   const authToken = ' 4ade91d3d56c6d3544a088bade58673c';
   const client = require('twilio')(accountSid, authToken);
   
   try {
     const product = await Product.create({
-      nom,
-      description,
-      prix,
-      rating,
+       name,
+       description,
+       imageUrl,
+       price,
+       isFavorite,
     });
     res.status(201).json({ success: true, message: 'produit a été ajouté' });
     

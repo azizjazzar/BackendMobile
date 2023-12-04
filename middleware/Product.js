@@ -2,28 +2,27 @@ const mongoose = require('mongoose');
 
 const ProductSchema = new mongoose.Schema({
  
-  nom: {
+  name: {
     type: String,
     required: true,
   },
   description: {
     type: String,
-    // required: true, // You can decide whether to make it required or not
   },
-  prix: {
+  imageUrl: {
+    type: String,
+  },
+  price: {
     type: Number,
     required: true,
   },
-  rating: {
-    type: Number,
-    required: true,
-  },
+  isFavorite: {
+    type: Boolean,
+    default: false,
+  }
  
 });
 
 const Product = mongoose.model('Product', ProductSchema);
 
 module.exports = Product;
-
-
-
