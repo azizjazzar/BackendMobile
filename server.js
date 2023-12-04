@@ -9,6 +9,9 @@ connectDB();
 app.use(express.json());
 
 
+app.get("/", (req, res) => {
+  res.send("Welcome to our server Electrigo !");
+});
 
 app.use("/api/auth", require("./routes/auth"));
 
