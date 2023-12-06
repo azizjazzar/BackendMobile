@@ -45,7 +45,7 @@ exports.getVehiculeById = async (req, res, next) => {
     if (!vehicule) {
       return res.status(404).json({ success: false, message: 'Vehicule not found' });
     }
-    res.status(200).json({ success: true, data: vehicule });
+    res.status(200).json(vehicule);
   } catch (error) {
     next(error);
   }
@@ -57,7 +57,7 @@ exports.updateVehicule = async (req, res, next) => {
   const updateData = req.body;
   try {
     const updatedVehicule = await Vehicule.findByIdAndUpdate(id, updateData, { new: true });
-    res.status(200).json({ success: true, data: updatedVehicule, message: 'Vehicule has been updated' });
+    res.status(200).json(updatedVehicule);
   } catch (error) {
     next(error);
   }
