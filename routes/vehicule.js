@@ -14,6 +14,6 @@ router.post('/addvehicules',verifyTokenMiddleware, addVehicule);
 router.get('/vehicules/:id', getVehiculeById);
 router.put('/vehicules/:id', updateVehicule);
 router.delete('/vehicules/:id', deleteVehicule);
-router.get('/vehicules', getAllVehicules);
+router.get('/vehicules',verifyTokenMiddleware, getAllVehicules);
 
 module.exports = router;
