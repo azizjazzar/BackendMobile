@@ -4,6 +4,9 @@ const saltRounds = 10; // Nombre de rounds pour le salage du mot de passe
 const jwt = require('jsonwebtoken');
 
 const nodemailer = require('nodemailer');
+const activeRefreshTokens = {};
+
+
 // Create operation
 exports.register = async (req, res, next) => {
   const {
@@ -43,18 +46,24 @@ exports.register = async (req, res, next) => {
     }
 };
 
-  exports.getByEmail = async (req, res, next) => {
-    const { email } = req.params;
-    try {
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(404).json({ success: false, message: "User not found by email" });
-      }
-      res.status(200).json({  user });
-    } catch (error) {
-      next(error);
+exports.getByEmail = async (req, res, next) => {
+  const { email } = req.params;
+  try {
+    const user = await User.findOne({ email }).select({ _id: 0, __v: 0 });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "Utilisateur introuvable par email" });
     }
-  };
+
+    // Retourne directement les attributs de l'utilisateur sans la clé "user"
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
 
 exports.getById = async (req, res, next) => {
   const { id } = req.params;
@@ -143,7 +152,7 @@ const sendWelcomeEmail = async (userEmail, code) => {
     console.error('Error sending welcome email:', error.message);
     throw new Error('Error sending welcome email: ' + error.message);
   }
-};// Fonction de login
+};
 exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -153,27 +162,21 @@ exports.login = async (req, res, next) => {
       const passwordMatch = await bcrypt.compare(password, user.mot_passe);
 
       if (passwordMatch) {
-        // Mots de passe correspondent, générez les tokens d'accès et de rafraîchissement
         const accessTokenPayload = { email: user.email, type: user.type };
         const refreshTokenPayload = { userId: user._id };
 
-        const accessToken = generateToken(accessTokenPayload);
+        const accessToken = generateToken(accessTokenPayload, process.env.JWT_SECRET, { expiresIn: '10s' });
         const refreshToken = generateToken(refreshTokenPayload, 'refreshTokenSecret', { expiresIn: '7d' });
 
-        // Store the refresh token in memory
         activeRefreshTokens[refreshToken] = true;
 
-        // Définissez le token d'accès en tant que cookie HttpOnly
-        res.cookie('jwtToken', accessToken, { httpOnly: true, maxAge: 3600000 });
+        res.cookie('jwtToken', accessToken, { httpOnly: true, maxAge: 60000 });
 
-        // Retournez les deux tokens dans la réponse
         res.json({ type: user.type, success: true, message: 'Connexion réussie', accessToken, refreshToken });
       } else {
-        // Mots de passe ne correspondent pas, retournez un message d'erreur
         res.json({ success: false, message: 'Email ou mot de passe incorrect' });
       }
     } else {
-      // Utilisateur non trouvé, retournez un message d'erreur
       res.json({ success: false, message: 'Email ou mot de passe incorrect' });
     }
   } catch (error) {
@@ -181,7 +184,6 @@ exports.login = async (req, res, next) => {
   }
 };
 
-// Your existing verify function
 exports.verify = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -195,7 +197,6 @@ exports.verify = async (req, res, next) => {
 
         req.user = user;
 
-        // Send a success message along with user information
         return res.status(200).json({ success: true, message: "Token is valid", user });
       });
     } else {
@@ -205,8 +206,7 @@ exports.verify = async (req, res, next) => {
     next(error);
   }
 };
-// Fonction de déconnexion
-// Fonction de déconnexion
+
 exports.logout = async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
@@ -215,10 +215,8 @@ exports.logout = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Le token de rafraîchissement est requis dans le corps de la requête.' });
     }
 
-    // Invalidate the refresh token stored in memory
     delete activeRefreshTokens[refreshToken];
 
-    // Clear JWT cookies (both access and refresh tokens)
     res.cookie('jwtToken', '', { maxAge: 1 });
     res.cookie('refreshToken', '', { maxAge: 1 });
 
@@ -228,9 +226,6 @@ exports.logout = async (req, res, next) => {
   }
 };
 
-// In-memory storage for active refresh tokens
-const activeRefreshTokens = {};
-// Function to refresh the access token using the refresh token
 exports.refreshToken = async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
@@ -239,38 +234,29 @@ exports.refreshToken = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Refresh token is required in the request body.' });
     }
 
-    // Check if the refresh token is in the list of active refresh tokens
     if (!activeRefreshTokens[refreshToken]) {
       console.log('Active Refresh Tokens:', activeRefreshTokens);
       return res.status(403).json({ success: false, message: 'Refresh token is not valid or has been invalidated.' });
     }
 
-    // Verify the refresh token
     jwt.verify(refreshToken, 'refreshTokenSecret', (err, user) => {
       if (err) {
         console.error('Error verifying refresh token:', err);
         return res.status(403).json({ success: false, message: 'Refresh token is not valid' });
       }
 
-      // Invalidate the previous refresh token
       delete activeRefreshTokens[refreshToken];
 
-      // User is valid, generate a new access token and refresh token
       const newAccessTokenPayload = { email: user.email, type: user.type };
-      const newRefreshTokenPayload = { userId: user._id };
+      const accessToken = generateToken(newAccessTokenPayload, process.env.JWT_SECRET, { expiresIn: '20s' });
+      const newRefreshToken = generateToken({ userId: user._id }, 'refreshTokenSecret', { expiresIn: '7d' });
 
-      const newAccessToken = generateToken(newAccessTokenPayload);
-      const newRefreshToken = generateToken(newRefreshTokenPayload, 'refreshTokenSecret', { expiresIn: '7d' });
-
-      // Store the new refresh token as the active one
       activeRefreshTokens[newRefreshToken] = true;
 
-      // Set the new access token and refresh token as HttpOnly cookies
-      res.cookie('jwtToken', newAccessToken, { httpOnly: true, maxAge: 3600000 });
-      res.cookie('refreshToken', newRefreshToken, { httpOnly: true, maxAge: 604800000 }); // 7 days in milliseconds
+      res.cookie('jwtToken', accessToken, { httpOnly: true, maxAge: 3600000 });
+      res.cookie('refreshToken', newRefreshToken, { httpOnly: true, maxAge: 604800000 });
 
-      // Return the new access token and refresh token in the response
-      res.json({ success: true, message: 'Token refreshed successfully', accessToken: newAccessToken, refreshToken: newRefreshToken });
+      res.json({ success: true, message: 'Token refreshed successfully', accessToken, refreshToken: newRefreshToken });
     });
   } catch (error) {
     console.error('Error in refreshToken:', error);

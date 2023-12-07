@@ -1,27 +1,25 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
-const ErrorResponse = require("../utils/errorResponse");
-exports.protect = async (req, res, next) => {
-  let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
-  }
-  if (!token) {
-    return next(new ErrorResponse("Not authorized to access this route ", 401));
-  }
+// Middleware pour vérifier le token
+const jwt = require('jsonwebtoken');
 
+exports.verifyTokenMiddleware = async (req, res, next) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
-    if (!user) {
-      return next(new ErrorResponse("No user Found ", 404));
+    const authHeader = req.headers.authorization;
+
+    if (authHeader) {
+      const token = authHeader.split(" ")[1];
+      jwt.verify(token, process.env.JWT_SECRET || 'yourFallbackSecretKey', (err, user) => {
+        if (err) {
+          return res.status(403).json({ success: false, message: "Token is not valid" });
+        }
+
+        // Ajoutez l'objet utilisateur à la demande pour une utilisation ultérieure
+        req.user = user;
+        next(); // Passez à la fonction suivante dans la chaîne middleware
+      });
+    } else {
+      res.status(401).json({ success: false, message: "Authentication header not provided (Token)" });
     }
-    req.user = user;
-    next();
   } catch (error) {
-    return next(new ErrorResponse("Not Authorized to access this route", 401));
+    next(error);
   }
 };
