@@ -10,10 +10,10 @@ const {
   getAllVehicules,
 } = require('../controllers/vehiculeCrud');
 
-router.post('/addvehicules',verifyTokenMiddleware, addVehicule);
+router.post('/addvehicules', addVehicule);
 router.get('/vehicules/:id', getVehiculeById);
 router.put('/vehicules/:id', updateVehicule);
 router.delete('/vehicules/:id', deleteVehicule);
-router.get('/vehicules',verifyTokenMiddleware, getAllVehicules);
+router.get('/vehicules', getAllVehicules);
 
 module.exports = router;
