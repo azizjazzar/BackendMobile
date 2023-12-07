@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const { verifyTokenMiddleware } = require("../middleware/auth");
+
 const {
   addVehicule,
   getVehiculeById,
@@ -8,7 +10,7 @@ const {
   getAllVehicules,
 } = require('../controllers/vehiculeCrud');
 
-router.post('/addvehicules', addVehicule);
+router.post('/addvehicules',verifyTokenMiddleware, addVehicule);
 router.get('/vehicules/:id', getVehiculeById);
 router.put('/vehicules/:id', updateVehicule);
 router.delete('/vehicules/:id', deleteVehicule);
