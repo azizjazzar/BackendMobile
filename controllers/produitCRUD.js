@@ -37,7 +37,7 @@ exports.getProductById = async (req, res, next) => {
     if (!product) {
       return res.status(404).json({ success: false, message: 'produit introuvable' });
     }
-    res.status(200).json({ success: true, data: product });
+    res.status(200).json(product);
   } catch (error) {
     next(error);
   }
