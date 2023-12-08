@@ -10,7 +10,7 @@ router.route("/register").post(register);
 router.route("/update/:email").put(update);
 
 // Assurez-vous que verifyTokenMiddleware est une fonction middleware
-router.route("/users").get(verifyTokenMiddleware, users);
+router.route("/users").get( users);
 router.route("/user/:email").get(getByEmail);
 router.route("/email/:email/:code").get(sendmail);
 router.route("/user/delete/:email").delete(remove);
