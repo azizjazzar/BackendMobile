@@ -4,7 +4,7 @@ const Product = require('../models/Product');
 exports.addProduct = async (req, res, next) => {
   const {name, description,imageUrl, price,isFavorite } = req.body;
   const accountSid = 'AC2e3e3f431567d6395601f5cc2dbb1e7a';
-  const authToken = '50aaae38c05f55d0551fca9e3d0003b9';
+  const authToken = '0ba8f94447ad96d797c91a183a0d7f23';
   const client = require('twilio')(accountSid, authToken);
   
   try {
