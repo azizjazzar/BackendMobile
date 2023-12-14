@@ -81,16 +81,26 @@ exports.getById = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   const { email } = req.params;
   const updateData = req.body;
+
   try {
+    // Vérifiez si le mot de passe est inclus dans les données de mise à jour
+    if (updateData.mot_passe) {
+      // Hasher le nouveau mot de passe
+      updateData.mot_passe = await bcrypt.hash(updateData.mot_passe, saltRounds);
+    }
+
     const updatedUser = await User.findOneAndUpdate({ email }, updateData, { new: true, runValidators: true });
+
     if (!updatedUser) {
       return res.status(404).json({ success: false, message: "User not found by email" });
     }
+
     res.status(200).json({ success: true, data: updatedUser, message: "User has been updated" });
   } catch (error) {
     next(error);
   }
 };
+
 
 
 exports.remove = async (req, res, next) => {
