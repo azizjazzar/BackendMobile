@@ -26,6 +26,7 @@ app.use('/api/rating',  require("./routes/ratingRoutes"));
 app.use("/api/categorie", require("./routes/categorie")); // Use consistent naming
 app.use("/api/vehicule", require("./routes/vehicule"));
 app.use("/api/reservation", require("./routes/reservation"));
+app.use("/api/payment", require("./routes/payment"));
 app.use("/api/mobile", require("./routes/Send"));
 app.use("/api/posts", require("./routes/postRoutes"));
 

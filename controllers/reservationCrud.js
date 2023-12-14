@@ -4,6 +4,9 @@ const stripe = require("stripe")('sk_test_51OErmACis87pjNWpHjxy4jOfBeV5X2cD3bB2o
 // Create operation for reservations
 exports.addReservation = async (req, res, next) => {
   const { date_debut, date_fin, montant, vehicule } = req.body;
+  //const accountSid = 'AC2e3e3f431567d6395601f5cc2dbb1e7a';
+  //const authToken = '0ba8f94447ad96d797c91a183a0d7f23';
+ // const client = require('twilio')(accountSid, authToken);
 
   try {
     const reservation = await Reservation.create({
@@ -12,11 +15,26 @@ exports.addReservation = async (req, res, next) => {
       montant,
       vehicule,
     });
+
+    // Construire le message Twilio avec les informations de réservation
+   // const messageBody = `Une réservation a été ajoutée !
+    //Date de début : ${date_debut}
+   // Date de fin : ${date_fin}
+   // Montant : ${montant}`;
+
+    /* Envoyer le message Twilio
+    await client.messages.create({
+      body: messageBody,
+      from: '+17208636271',
+      to: '+21652040848'
+    });
+*/
     res.status(201).json({ success: true, message: "Reservation has been added" });
   } catch (error) {
     next(error);
   }
 };
+
 
 // Read operation for a specific reservation by ID
 exports.getReservationById = async (req, res, next) => {
@@ -65,47 +83,6 @@ exports.getAllReservations = async (req, res, next) => {
   
   }
 };
-// Create Payment Intent
-exports.createPaymentIntent = async (req, res) => {
-  // Récupérer le montant depuis le corps de la requête
-  const { amount } = req.body;
 
-  try {
-    // Créer un PaymentIntent avec le montant de la commande et la devise
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount, // Utiliser le montant fourni dans le corps de la requête
-      currency: 'eur',
-      automatic_payment_methods: {
-        enabled: true,
-        allow_redirects: 'never', // S'assurer qu'aucune méthode de paiement basée sur une redirection n'est utilisée
-      },
-    });
-
-    res.send({
-      clientSecret: paymentIntent.client_secret,
-      paymentIntentId: paymentIntent.id, // Ajouter l'ID du PaymentIntent à la réponse
-    });
-  } catch (error) {
-    console.error('Erreur lors de la création du PaymentIntent :', error);
-    res.status(500).json({ success: false, error: error.message });
-  }
-};
-
-// Confirm Payment Intent
-exports.confirmpayment = async (req, res) => {
-  
-  const { paymentIntentId } = req.body;
-  try {
-  const paymentConfirmation = await stripe.paymentIntents.confirm(
-    paymentIntentId,
-    { payment_method: 'pm_card_visa' }
-);
-
-    res.json({ success: true, paymentIntent });
-  } catch (error) {
-    console.error('Erreur lors de la confirmation du paiement :', error);
-    res.status(500).json({ success: false, error: error.message });
-  }
-};
 
 

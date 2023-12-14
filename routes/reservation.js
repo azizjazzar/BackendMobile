@@ -5,9 +5,7 @@ const {
   getReservationById,
   updateReservation,
   deleteReservation,
-  getAllReservations,
-  createPaymentIntent,
-  confirmpayment
+  getAllReservations
 } = require('../controllers/reservationCrud');
 
 router.post('/addreservations', addReservation);
@@ -16,6 +14,4 @@ router.put('/reservations/:id', updateReservation);
 router.delete('/reservations/:id', deleteReservation);
 // Correct: Ensure that getAllReservations is defined and exported
 router.get('/reservations', getAllReservations);
-router.post('/create-payment-intent', createPaymentIntent);
-router.post('/confirmpayment', confirmpayment);
 module.exports = router;
