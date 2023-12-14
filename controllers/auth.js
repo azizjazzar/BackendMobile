@@ -10,7 +10,7 @@ const activeRefreshTokens = {};
 // Create operation
 exports.register = async (req, res, next) => {
   const {
-     id: null,
+     id,
       nom,
       prenom,
       email,
