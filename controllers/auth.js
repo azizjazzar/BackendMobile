@@ -10,6 +10,7 @@ const activeRefreshTokens = {};
 // Create operation
 exports.register = async (req, res, next) => {
   const {
+     id: null,
       nom,
       prenom,
       email,
@@ -27,6 +28,7 @@ exports.register = async (req, res, next) => {
       const hashedPassword = await bcrypt.hash(mot_passe, saltRounds);
 
       const users = await User.create({
+         id: null,
         nom,
         prenom,
         email,
