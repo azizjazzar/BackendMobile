@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 
 const UserSchema = new mongoose.Schema({
-  id: { type: Number, unique: true, required: true },
+  _id: { type: Number, required: true }, // Définir le type comme Number
   nom: {
     type: String,
   },
