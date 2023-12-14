@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 
 const UserSchema = new mongoose.Schema({
-    id: { type: Number, index: true },
+  id: { type: Number, autoIncrement: true, unique: true },
   nom: {
     type: String,
   },
