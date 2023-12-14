@@ -20,6 +20,9 @@ app.use("/api/review", require("./routes/review"));
 app.use("/api/garage", require("./routes/garage"));
 app.use("/api/posts", require("./routes/postRoutes")); 
 app.use("/api/product", require("./routes/product"));
+app.use("/api/favories", require("./routes/FavoritesRoutes"));
+app.use('/api/carte',  require("./routes/CarteRoutes"));
+app.use('/api/rating',  require("./routes/ratingRoutes"));
 app.use("/api/categorie", require("./routes/categorie")); // Use consistent naming
 app.use("/api/vehicule", require("./routes/vehicule"));
 app.use("/api/reservation", require("./routes/reservation"));

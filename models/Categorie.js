@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const CategorieSchema = new mongoose.Schema({
-  categorie: {
+  categoryIcon: {
+    type: String,
+    required: true,
+  },
+  categoryTitle: {
     type: String,
     required: true,
   },
