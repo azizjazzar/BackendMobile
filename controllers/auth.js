@@ -49,7 +49,7 @@ exports.register = async (req, res, next) => {
 exports.getByEmail = async (req, res, next) => {
   const { email } = req.params;
   try {
-    const user = await User.findOne({ email }).select({ _id: 0, __v: 0 });
+    const user = await User.findOne({ email }).select({ __v: 0 });
 
     if (!user) {
       return res.status(404).json({ success: false, message: "Utilisateur introuvable par email" });
