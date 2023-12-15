@@ -7,7 +7,7 @@ exports.addProduct = async (req, res, next) => {
   const { userId } = req.user;  // Assure-toi que tu as l'ID de l'utilisateur dans req.user
 
   const accountSid = 'AC2e3e3f431567d6395601f5cc2dbb1e7a';
-  const authToken = '13a790813b88e650d1752ca2408c8086';
+  const authToken = 'd643ded4653174754e36ef4ae281452d';
   const client = require('twilio')(accountSid, authToken);
   
   try {
