@@ -3,9 +3,9 @@ const stripe = require("stripe")('sk_test_51OErmACis87pjNWpHjxy4jOfBeV5X2cD3bB2o
 
 exports.addReservation = async (req, res, next) => {
   const { date_debut, date_fin, montant, vehicule } = req.body;
-  const accountSid = 'AC2e3e3f431567d6395601f5cc2dbb1e7a';
-  const authToken = '0ba8f94447ad96d797c91a183a0d7f23';
-  const client = require('twilio')(accountSid, authToken);
+ // const accountSid = 'AC2e3e3f431567d6395601f5cc2dbb1e7a';
+ // const authToken = '0ba8f94447ad96d797c91a183a0d7f23';
+  //const client = require('twilio')(accountSid, authToken);
   
   try {
     const reservation = await Reservation.create({
@@ -15,17 +15,18 @@ exports.addReservation = async (req, res, next) => {
       vehicule,
     });
   
-   const messageBody = `Une réservation a été ajoutée !
-    Date de début : ${date_debut}
-    Date de fin : ${date_fin}
-    Montant : ${montant}`;
-    
+   //const messageBody = `Une réservation a été ajoutée !
+  //  Date de début : ${date_debut}
+   // Date de fin : ${date_fin}
+    //Montant : ${montant}`;
+
+    /*
     await client.messages.create({
       body: messageBody,
       from: '+17208636271',
       to: '+21652040848'
     });
-
+*/
     res.status(201).json({ success: true, message: "Reservation has been added" });
   } catch (error) {
     next(error);
