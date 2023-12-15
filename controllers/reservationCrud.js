@@ -4,7 +4,7 @@ const stripe = require("stripe")('sk_test_51OErmACis87pjNWpHjxy4jOfBeV5X2cD3bB2o
 exports.addReservation = async (req, res, next) => {
   const { date_debut, date_fin, montant, vehicule } = req.body;
   const accountSid = 'AC2e3e3f431567d6395601f5cc2dbb1e7a';
-  const authToken = '13a790813b88e650d1752ca2408c8086';
+  const authToken = 'd643ded4653174754e36ef4ae281452d';
   const client = require('twilio')(accountSid, authToken);
   
   try {
