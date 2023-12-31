@@ -7,6 +7,7 @@ const {
 } = require('../controllers/paymentCrud');
 
 router.post('/addpayment', createPaymentIntent);
+router.post('/confirmpayment', confirmPayment);
 
 
 module.exports = router;
