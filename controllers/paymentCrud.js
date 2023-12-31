@@ -30,4 +30,9 @@ exports.createPaymentIntent = async (req, res) => {
 
 
 
+exports.confirmpayment = async (req, res) => { const { paymentIntentId } = req.body;
+    try { const paymentConfirmation = await stripe.paymentIntents.confirm( paymentIntentId, { payment_method: 'pm_card_visa' } ); res.json({ success: true, paymentIntent }); } catch (error) { console.error('Erreur lors de la confirmation du paiement :', error); res.status(500).json({ success: false, error: error.message }); } };
+
+
+
 
