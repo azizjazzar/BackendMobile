@@ -221,7 +221,7 @@ exports.comparePasswords = async (req, res, next) => {
     const { passenh, passeh } = req.body;
 
     // Utilisez bcrypt.compare pour comparer le mot de passe non haché avec le mot de passe haché stocké en base de données
-    const correspondance = await bcrypt.compare(passeNH, passeH);
+    const correspondance = await bcrypt.compare(passenh, passeh);
 
     res.json({ resultat });
   } catch (erreur) {
