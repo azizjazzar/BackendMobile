@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {
-  register, users, getByEmail, remove, update, sendmail, login, logout, refreshToken
+  register, users, getByEmail, remove, update, sendmail, login, logout, refreshToken,updateI,usersI,getByEmailI
 } = require("../controllers/auth");
 const { verifyTokenMiddleware } = require("../middleware/auth");
 const { verify } = require("crypto");
@@ -17,5 +17,9 @@ router.route("/user/delete/:email").delete(remove);
 router.route("/login").post(login);
 router.route("/logout").post(logout);
 router.route("/refresh").post(refreshToken);
+//I
+router.route("/updateI/:email").put(updateI);
+router.route("/usersI").get(usersI);
+router.route("/userI/:email").get(getByEmailI);
 
 module.exports = router;
