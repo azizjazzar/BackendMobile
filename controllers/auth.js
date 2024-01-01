@@ -216,7 +216,20 @@ exports.verify = async (req, res, next) => {
     next(error);
   }
 };
+exports.comparePasswords = async (req, res, next) => {
+  try {
+    const { passeNH, passeH } = req.body;
 
+    // Utilisez bcrypt.compare pour comparer le mot de passe non haché avec le mot de passe haché stocké en base de données
+    const correspondance = await bcrypt.compare(passeNH, passeH);
+
+    res.json({ correspondance });
+  } catch (erreur) {
+    // Gérez les erreurs lors de la comparaison des mots de passe
+    console.error('Erreur lors de la comparaison des mots de passe :', erreur);
+    res.status(500).json({ erreur: 'Erreur interne du serveur' });
+  }
+}; 
 exports.logout = async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
