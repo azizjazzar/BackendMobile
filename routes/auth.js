@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {
-  register, users, getByEmail, remove, update, sendmail, login, logout, refreshToken,updateI,usersI,getByEmailI
+  register, users, getByEmail, remove, update, sendmail, login, logout, refreshToken,updateI,usersI,getByEmailI,registerI
 } = require("../controllers/auth");
 const { verifyTokenMiddleware } = require("../middleware/auth");
 const { verify } = require("crypto");
@@ -21,5 +21,6 @@ router.route("/refresh").post(refreshToken);
 router.route("/updateI/:email").put(updateI);
 router.route("/usersI").get(usersI);
 router.route("/userI/:email").get(getByEmailI);
+router.route("/registerI").post(registerI);
 
 module.exports = router;
