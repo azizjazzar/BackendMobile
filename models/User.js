@@ -31,10 +31,7 @@ const UserSchema = new mongoose.Schema({
   picture: {
     type: String,
   },
-  id: {
-    type: Number,
-    unique: true,
-  },
+
 });
 
 UserSchema.pre('save', async function (next) {
