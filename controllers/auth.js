@@ -260,6 +260,42 @@ exports.getByIdI = async (req, res, next) => {
     next(error);
   }
 };
+exports.registerI = async (req, res, next) => {
+  const {
+      nom,
+      prenom,
+      email,
+      genre,
+      datenaissance,
+      telephone,
+      adresse,
+      mot_passe,
+      type,
+      picture
+     
+      
+  } = req.body;
+
+  try {
+      const users = await User.create({
+        nom,
+        prenom,
+        email,
+        genre,
+        datenaissance,
+        telephone,
+        adresse,
+        mot_passe,
+        type,
+        picture
+        
+      });
+      console.log(users)
+      res.status(201).json({ success: true, message: "user has been added" });
+    } catch (error) {
+      next(error);
+    }
+  };
 
 exports.updateI = async (req, res, next) => {
   const { email } = req.params;
