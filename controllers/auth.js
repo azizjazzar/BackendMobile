@@ -235,7 +235,69 @@ exports.logout = async (req, res, next) => {
     res.status(400).json({ err });
   }
 };
+ exports.getByEmailI = async (req, res, next) => {
+    const { email } = req.params;
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ success: false, message: "User not found by email" });
+      }
+      res.status(200).json({  user });
+    } catch (error) {
+      next(error);
+    }
+  };
 
+exports.getByIdI = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "user not found" });
+    }
+    res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateI = async (req, res, next) => {
+  const { email } = req.params;
+  const updateData = req.body;
+  try {
+    const updatedUser = await User.findOneAndUpdate({ email }, updateData, { new: true, runValidators: true });
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: "User not found by email" });
+    }
+    res.status(200).json({ success: true, data: updatedUser, message: "User has been updated" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+exports.removeI = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const removedUser = await User.findByIdAndRemove(id);
+    if (!removedUser) {
+      return res.status(404).json({ success: false, message: "Borne not found" });
+    }
+    res.status(200).json({ success: true, message: "Borne has been deleted" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.usersI = async (req, res, next) => {
+  try {
+    const users = await User.find();
+    res.send(users);
+  } catch (error) {
+    next(error);
+  }
+};
 exports.refreshToken = async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
