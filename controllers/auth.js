@@ -140,6 +140,7 @@ exports.sendmail = async (req, res, next) => {
 };
 
 // Function to send a welcome email
+/*
 const sendWelcomeEmail = async (userEmail, code) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -161,6 +162,30 @@ const sendWelcomeEmail = async (userEmail, code) => {
   } catch (error) {
     console.error('Error sending welcome email:', error.message);
     throw new Error('Error sending welcome email: ' + error.message);
+  }
+};*/
+const sendDeletionEmail = async (userEmail) => {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'azizjazz60@gmail.com',
+      pass: 'fyoamzqutrqsxmsu',
+    },
+  });
+
+  const mailOptions = {
+    from: 'azizjazz60@gmail.com',
+    to: userEmail,
+    subject: 'Compte supprimé sur Electrigo',    
+    text: `Cher utilisateur,\n\nNous vous informons que votre compte sur Electrigo a été supprimé. Si vous avez des questions ou des préoccupations, veuillez nous contacter.\n\nCordialement,\nL'équipe Electrigo`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Email de suppression envoyé à : ${userEmail}`);
+  } catch (error) {
+    console.error('Erreur lors de l\'envoi de l\'e-mail de suppression :', error.message);
+    throw new Error('Erreur lors de l\'envoi de l\'e-mail de suppression : ' + error.message);
   }
 };
 exports.login = async (req, res, next) => {
